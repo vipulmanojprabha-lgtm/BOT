@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no,viewport-fit=cover">
+<title>Ace | 5LVL WIN CONFIRM + BDG Win Game</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#05060A; --red:#ff263d; --gold:#ffd36a; --green:#19E5A4; --txt:#fff; 
+  --purple:#8B5CF6; --border:rgba(255,78,91,.22);
+  --font-main: 'Poppins', sans-serif;
+  --font-tech: 'Orbitron', sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:var(--font-main);background:var(--bg);color:var(--txt);display:flex;flex-direction:column;height:100vh;height:100dvh;overflow:hidden;}
+
+/* ===== COMMON GLASS STYLES ===== */
+.glass-container {
+    background: rgba(20, 10, 15, 0.4);
+    backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 24px; padding: 30px 40px;
+    display: flex; flex-direction: column; align-items: center;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255,255,255,0.1);
+}
+
+/* --- GENZ AESTHETIC LOADER --- */
+#genzLoader {
+    position: fixed; inset: 0; background: #05060A; z-index: 99999;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    transition: opacity 0.5s ease-out;
+    background-image: radial-gradient(circle at 15% 50%, rgba(255, 38, 61, 0.08), transparent 40%),
+                      radial-gradient(circle at 85% 30%, rgba(139, 92, 246, 0.08), transparent 40%);
+}
+.spinner-box { position: relative; width: 70px; height: 70px; margin-bottom: 20px; }
+.ring-outer { position: absolute; inset: 0; border-radius: 50%; border: 3px solid transparent; border-top-color: var(--red); border-left-color: var(--red); animation: spin 1.2s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite; filter: drop-shadow(0 0 10px rgba(255, 38, 61, 0.6)); }
+.ring-inner { position: absolute; inset: 10px; border-radius: 50%; border: 2px solid transparent; border-bottom-color: var(--purple); border-right-color: var(--purple); animation: spin-reverse 1s linear infinite; filter: drop-shadow(0 0 8px rgba(139, 92, 246, 0.6)); }
+.spinner-center { position: absolute; inset: 25px; border-radius: 50%; background: var(--gold); box-shadow: 0 0 15px var(--gold); animation: pulse 1.5s ease-in-out infinite; }
+@keyframes spin { 100% { transform: rotate(360deg); } }
+@keyframes spin-reverse { 100% { transform: rotate(-360deg); } }
+@keyframes pulse { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(0.8); opacity: 0.6; } }
+
+.loader-title { font-family: var(--font-tech); font-size: 20px; font-weight: 900; letter-spacing: 3px; color: #fff; margin-bottom: 6px; text-transform: uppercase; }
+.loader-title span { color: var(--gold); }
+.loader-sub { font-size: 11px; color: #888; margin-bottom: 25px; letter-spacing: 1px; font-weight: 600; }
+
+.progress-container { width: 220px; height: 6px; background: rgba(255,255,255,0.05); border-radius: 10px; overflow: hidden; position: relative; }
+.progress-fill { height: 100%; width: 0%; background: linear-gradient(90deg, var(--red), var(--gold), var(--red)); background-size: 200% 100%; animation: gradientShift 2s linear infinite; border-radius: 10px; box-shadow: 0 0 10px rgba(255, 38, 61, 0.8); transition: width 0.1s linear; }
+@keyframes gradientShift { 0% { background-position: 100% 0; } 100% { background-position: -100% 0; } }
+.percent-text { margin-top: 10px; font-family: var(--font-tech); font-size: 14px; font-weight: 700; color: var(--red); font-variant-numeric: tabular-nums; }
+
+/* --- MAIN CONTENT --- */
+#mainContent { display: none; flex-direction: column; width: 100vw; height: 100vh; height: 100dvh; }
+
+/* TOP PANEL (25%) */
+#topPanel{flex:0 0 25%;background:linear-gradient(180deg,#1a0a0e 0%,#05060A 100%);display:flex;flex-direction:column;border-bottom:1px solid var(--red);overflow:hidden;}
+.top-header{ background:linear-gradient(155deg,#230a10,#0a0608); border-bottom:1px solid var(--border); padding:6px 10px; display:flex; justify-content:space-between; align-items:center; }
+.brand-name{font-family: var(--font-tech); font-size:13px;font-weight:900;color:var(--gold);letter-spacing:2px;text-shadow:0 0 10px rgba(255,211,106,0.3);}
+.mode-toggle{display:flex;gap:3px;background:#111;padding:2px;border-radius:6px;border:1px solid #333;}
+.mode-btn{padding:4px 8px;border-radius:4px;font-family:var(--font-tech);font-size:9px;font-weight:bold;background:transparent;color:#777;border:none;cursor:pointer;transition:0.2s;}
+.mode-btn.active{background:var(--red);color:#fff;box-shadow: 0 0 8px rgba(255,38,61,0.6);}
+
+.panel-content{padding:4px 8px;overflow-y:auto;flex:1;display:flex;flex-direction:column;justify-content:center;position:relative;}
+.panel-content::-webkit-scrollbar { width: 2px; }
+.panel-content::-webkit-scrollbar-thumb { background: var(--red); border-radius: 10px; }
+
+/* ===== 💎 PREMIUM UID PANEL ===== */
+.uid-box { 
+    display: flex; flex-direction: column; gap: 6px; justify-content: center; 
+    height: 100%; align-items: center; position: relative;
+    background: radial-gradient(circle at center, rgba(255,211,106,0.05) 0%, transparent 70%);
+    border-radius: 12px; pointer-events: auto;
+}
+.uid-icon-wrap { position: relative; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; }
+.uid-icon { font-size: 20px; z-index: 2; animation: floatIcon 2s ease-in-out infinite; filter: drop-shadow(0 0 10px rgba(255,211,106,0.8)); }
+.icon-ring { position: absolute; inset: 0; border-radius: 50%; border: 1px dashed rgba(255,211,106,0.4); animation: rotateRing 4s linear infinite; }
+@keyframes floatIcon { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-3px); } }
+@keyframes rotateRing { 100% { transform: rotate(360deg); } }
+
+.uid-input-group { 
+    display: flex; gap: 6px; width: 100%; max-width: 320px;
+    background: rgba(5,6,10,0.8); padding: 4px; border-radius: 10px;
+    border: 1px solid rgba(255, 211, 106, 0.25); 
+    box-shadow: inset 0 0 15px rgba(0,0,0,0.8), 0 0 10px rgba(255,211,106,0.05);
+    transition: all 0.3s;
+}
+.uid-input-group:focus-within { border-color: var(--gold); box-shadow: inset 0 0 15px rgba(0,0,0,0.8), 0 0 20px rgba(255,211,106,0.2); }
+
+.uid-input {
+    flex: 1; padding: 6px 8px; background: transparent !important;
+    border: none; color: var(--gold) !important; font-family: var(--font-tech);
+    font-size: 14px; font-weight: 900 !important; text-align: center; letter-spacing: 5px; outline: none;
+    -webkit-text-fill-color: var(--gold) !important;
+}
+input:-webkit-autofill { -webkit-box-shadow: 0 0 0 30px #05060A inset !important; -webkit-text-fill-color: var(--gold) !important; }
+.uid-input::placeholder { font-family: var(--font-main); color: #555; letter-spacing: 2px; font-size: 11px; font-weight: 600; -webkit-text-fill-color: #555;}
+.uid-input.shake { animation: shake 0.4s; color: var(--red) !important; -webkit-text-fill-color: var(--red) !important;}
+
+.uid-btn {
+    position: relative; overflow: hidden; padding: 0 14px; border-radius: 6px; border: none;
+    background: linear-gradient(135deg, #ffd36a, #ff8a00); color: #000; 
+    font-family: var(--font-tech); font-weight: 900; font-size: 10px; 
+    cursor: pointer; transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+    box-shadow: 0 0 12px rgba(255, 149, 0, 0.5); letter-spacing: 1px; min-width: 75px; 
+}
+.uid-btn:hover { box-shadow: 0 0 20px rgba(255, 149, 0, 0.8), 0 0 30px rgba(255, 211, 106, 0.4); transform: translateY(-1px); }
+.uid-btn:active, .uid-btn.pop-anim { animation: popUp 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+@keyframes popUp { 0% { transform: scale(1); box-shadow: 0 0 12px rgba(255, 149, 0, 0.5); } 50% { transform: scale(1.15); box-shadow: 0 0 30px rgba(255, 211, 106, 1), 0 0 40px rgba(255, 149, 0, 0.6); } 100% { transform: scale(0.95); box-shadow: 0 0 5px rgba(255, 149, 0, 0.3); } }
+
+.uid-btn.loading { color: transparent !important; pointer-events: none; animation: none; transform: scale(1); }
+.uid-btn.loading::after { content: ''; position: absolute; top: 50%; left: 50%; width: 14px; height: 14px; margin: -7px 0 0 -7px; border: 2px solid rgba(0, 0, 0, 0.2); border-top-color: #000; border-radius: 50%; animation: spin 0.8s linear infinite; }
+.uid-msg { font-size: 9px; text-align: center; height: 12px; transition: color 0.3s; font-weight: 700; letter-spacing: 1px;}
+
+@keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 50% { transform: translateX(5px); } 75% { transform: translateX(-5px); } }
+
+/* ===== CONNECTING ANIMATION (3 SEC) ===== */
+#connectingState { display: none; flex-direction: column; align-items: center; justify-content: center; height: 100%; width: 100%; position: absolute; top: 0; left: 0; background: linear-gradient(180deg, #1a0a0e 0%, #05060A 100%); z-index: 10; animation: fadeIn 0.3s ease-out; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+.connect-spinner { width: 36px; height: 36px; border-radius: 50%; border: 3px solid rgba(255, 211, 106, 0.1); border-top-color: var(--gold); border-right-color: var(--red); animation: spin 1s linear infinite; margin-bottom: 10px; filter: drop-shadow(0 0 10px rgba(255,211,106,0.6)); }
+.connect-text { font-family: var(--font-tech); font-size: 10px; font-weight: 800; color: var(--gold); letter-spacing: 2px; text-shadow: 0 0 10px rgba(255,211,106,0.5); animation: pulseText 1s infinite alternate; }
+.connect-check { font-size: 30px; margin-bottom: 4px; display: none; animation: popCheck 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; filter: drop-shadow(0 0 15px rgba(25,229,164,0.8)); }
+@keyframes popCheck { 0% { transform: scale(0); } 100% { transform: scale(1); } }
+@keyframes pulseText { from { opacity: 0.6; } to { opacity: 1; } }
+
+/* Prediction Box */
+#predBoxContainer { display: none; flex-direction: column; gap: 4px; height: 100%; }
+.pred-box{background:linear-gradient(155deg,#230a10,#0a0608);border:1px solid var(--border);border-radius:8px;padding:6px;position:relative;}
+.top-info{display:flex;justify-content:space-between;align-items:center;font-size:9px;color:#c77c83;font-weight:bold;margin-bottom:2px;}
+.pred-label{font-size:8px;letter-spacing:1px;color:#888;text-align:center;}
+.pred-value{font-family: var(--font-tech); font-size:30px;font-weight:900;text-align:center;margin:0;line-height:1.1;transition:all 0.3s;}
+.pred-value.B{color:var(--gold);text-shadow:0 0 15px rgba(255,211,106,0.4);}
+.pred-value.S{color:var(--red);text-shadow:0 0 15px rgba(255,38,61,0.4);}
+.pred-value.WAIT{color:#555;font-size:20px;}
+.pred-conf{font-size:9px;color:#d8b9bc;text-align:center;margin-bottom: 4px;}
+.level-row{display:flex;justify-content:space-between;gap:4px;margin-top:2px;}
+.l-box{flex:1;background:#05060A;border:1px solid #333;border-radius:4px;padding:2px 6px;text-align:center;display:flex;justify-content:space-between;align-items:center;}
+.l-title{font-size:7px;color:#777;font-weight:bold;}
+.l-val{font-family: var(--font-tech); font-size:10px;font-weight:900;color:var(--gold);}
+.boxes{display:grid;grid-template-columns:repeat(10,1fr);gap:3px;}
+.box{aspect-ratio:1;border-radius:4px;background:#111;border:1px solid #333;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:bold;color:#555;}
+.box.B{background:rgba(255,211,106,0.15);color:var(--gold);border-color:var(--gold);}
+.box.S{background:rgba(255,38,61,0.15);color:var(--red);border-color:var(--red);}
+
+/* BOTTOM PANEL (Game - Loaded From Start) */
+#bottomPanel{ 
+    flex:1; 
+    position:relative; 
+    background:#000; 
+    overflow:hidden; 
+    display:flex; 
+    flex-direction:column; 
+}
+iframe{width:100%;height:100%;border:none;background:#111;display:block;flex:1;}
+
+/* WIN ANIMATION */
+#winOverlay{position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:9999;display:none;flex-direction:column;align-items:center;justify-content:center;pointer-events:none;opacity:0;transition:opacity 0.3s;backdrop-filter: blur(5px);}
+#winOverlay.show{display:flex;opacity:1;}
+.win-trophy{font-size:120px;animation:winPop 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;filter:drop-shadow(0 0 30px rgba(255, 211, 106, 0.8));}
+.win-text{font-family: var(--font-tech); font-size:40px;font-weight:900;color:var(--gold);letter-spacing:5px;margin-top:10px;text-shadow:0 0 20px rgba(255, 211, 106, 0.8);animation:slideUp 0.5s ease-out forwards;}
+@keyframes winPop{0%{transform:scale(0) rotate(-45deg);}100%{transform:scale(1) rotate(0);}}
+@keyframes slideUp{0%{transform:translateY(30px);opacity:0;}100%{transform:translateY(0);opacity:1;}}
+</style>
+<style>
+#accessLockOverlay{position:fixed;inset:0;z-index:1000000;display:none;align-items:center;justify-content:center;text-align:center;padding:24px;background:rgba(3,4,8,.98);font-family:var(--font-main)}
+#accessLockOverlay .lock-card{max-width:360px;width:100%;padding:28px 22px;border:1px solid rgba(255,211,106,.35);border-radius:18px;background:linear-gradient(150deg,#1b1017,#08090d);box-shadow:0 0 35px rgba(255,38,61,.15)}
+#accessLockOverlay h2{font-family:var(--font-tech);font-size:20px;color:var(--gold);margin-bottom:12px}
+#accessLockOverlay p{font-size:13px;color:#ddd;line-height:1.7}
+#accessLockOverlay button{margin-top:18px;padding:12px 18px;border-radius:9px;background:var(--gold);color:#000;font-weight:900;border:0}
+</style>
+</head>
+<body>
+<div id="accessLockOverlay" role="alertdialog" aria-modal="true">
+  <div class="lock-card"><h2 id="accessLockTitle">ACCESS LOCKED</h2><p id="accessLockMessage">Access has been disabled by the administrator.</p><button id="accessLockOk" type="button">OK</button></div>
+</div>
+
+<!-- 1. GENZ AESTHETIC LOADER -->
+<div id="genzLoader">
+    <div class="glass-container">
+        <div class="spinner-box">
+            <div class="ring-outer"></div>
+            <div class="ring-inner"></div>
+            <div class="spinner-center"></div>
+        </div>
+        <div class="loader-title">VIPUL <span>BHAI</span></div>
+        <div class="loader-sub" id="loaderSubText">Initializing AI Engine...</div>
+        
+        <div class="progress-container">
+            <div class="progress-fill" id="loadFill"></div>
+        </div>
+        <div class="percent-text" id="loadPercent">0%</div>
+    </div>
+</div>
+
+<!-- 2. MAIN CONTENT -->
+<div id="mainContent">
+    <!-- WIN ANIMATION OVERLAY -->
+    <div id="winOverlay">
+        <div class="win-trophy">🏆</div>
+        <div class="win-text">WIN !</div>
+    </div>
+
+    <!-- TOP PANEL (25%) -->
+    <div id="topPanel">
+        <div class="top-header">
+            <div class="brand-name">VIPUL BHAI</div>
+            <div class="mode-toggle">
+                <button class="mode-btn active" id="oneMinBtn" onclick="switchMode('1min')">1 MIN</button>
+                <button class="mode-btn" id="thirtySecBtn" onclick="switchMode('30sec')">30 SEC</button>
+            </div>
+        </div>
+
+        <div class="panel-content">
+            <!-- 💎 PREMIUM UID PANEL -->
+            <div id="uidBox" class="uid-box">
+                <div class="uid-icon-wrap">
+                    <div class="icon-ring"></div>
+                    <div class="uid-icon">🛡️</div>
+                </div>
+                <div class="uid-input-group">
+                    <input type="text" id="uidInput" class="uid-input" placeholder="ENTER UID" inputmode="numeric" maxlength="10" autocomplete="off">
+                    <button id="connectBtn" class="uid-btn">CONNECT</button>
+                </div>
+                <div id="uidSubText" class="uid-msg"></div>
+            </div>
+
+            <!-- 3-Second Connecting Animation -->
+            <div id="connectingState">
+                <div class="connect-spinner" id="connSpinner"></div>
+                <div class="connect-check" id="connCheck">✅</div>
+                <div class="connect-text" id="connectText">VERIFYING UID...</div>
+            </div>
+
+            <!-- Prediction Box -->
+            <div id="predBoxContainer">
+                <div class="pred-box">
+                    <div class="top-info">
+                        <span id="periodId" style="font-family: var(--font-tech);">...</span>
+                        <span id="timer" style="color:var(--gold); font-family: var(--font-tech);">⏱ --s</span>
+                    </div>
+                    <div class="pred-label">AI PREDICTION</div>
+                    <div class="pred-value WAIT" id="predValue">WAIT</div>
+                    <div class="pred-conf">Confidence: <span id="predConf" style="color:var(--gold);">—</span></div>
+                    
+                    <div class="level-row">
+                        <div class="l-box">
+                            <span class="l-title">HIGHEST:</span>
+                            <span class="l-val" id="highestLevelDisplay">L1</span>
+                        </div>
+                        <div class="l-box">
+                            <span class="l-title">CURRENT:</span>
+                            <span class="l-val" id="currentLevelDisplay">L1</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="boxes" id="boxes"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- BOTTOM PANEL (75%) - GAME LOADS IMMEDIATELY -->
+    <div id="bottomPanel">
+        <iframe id="gameIframe" src="https://bdgwin37.com/#/register?invitationCode=8674616623662"></iframe>
+    </div>
+</div>
+
+<script type="module">
+import { initializeApp, getApps } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+import { getDatabase, ref, get, onValue, set, remove, onDisconnect } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js';
+
+const firebaseConfig = {
+  apiKey: 'AIzaSyBFdvXN8SAy77EDQp5HNykO5z2Wa0W8sb0',
+  authDomain: 'bdgrocky.firebaseapp.com',
+  databaseURL: 'https://bdgrocky-default-rtdb.asia-southeast1.firebasedatabase.app',
+  projectId: 'bdgrocky'
+};
+const app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
+const db = getDatabase(app);
+const settingsRef = ref(db, 'settings');
+const approvedRef = ref(db, 'approved_uids');
+let settingsCache = null;
+let approvedCache = null;
+let settingsReadyResolve, approvedReadyResolve;
+const settingsReady = new Promise(resolve => settingsReadyResolve = resolve);
+const approvedReady = new Promise(resolve => approvedReadyResolve = resolve);
+window.accessControlReady = Promise.all([settingsReady, approvedReady]);
+let previousAuthVersion;
+let loggedInUid = '';
+let sessionKey = 'sess_' + Math.random().toString(36).slice(2) + Date.now().toString(36);
+let sessionRegistered = false;
+
+function uidKey(uid) { return String(uid || '').trim().replace(/[.#$\/\[\]]/g, '_'); }
+function isApproved(uid) {
+  if (!approvedCache) return false;
+  const item = approvedCache[uidKey(uid)];
+  return !!(item && item.approved === true && String(item.uid || '').trim() === String(uid).trim());
+}
+function showLock(title, message) {
+  const overlay = document.getElementById('accessLockOverlay');
+  document.getElementById('accessLockTitle').textContent = title;
+  document.getElementById('accessLockMessage').textContent = message;
+  overlay.style.display = 'flex';
+}
+async function endSession(title, message) {
+  loggedInUid = '';
+  window.isVerified = false;
+  const pred = document.getElementById('predBoxContainer');
+  const uidBox = document.getElementById('uidBox');
+  const connecting = document.getElementById('connectingState');
+  const btn = document.getElementById('connectBtn');
+  if (pred) pred.style.display = 'none';
+  if (connecting) connecting.style.display = 'none';
+  if (uidBox) uidBox.style.display = 'flex';
+  if (btn) { btn.disabled = false; btn.classList.remove('loading'); }
+  const input = document.getElementById('uidInput');
+  if (input) input.value = '';
+  if (sessionRegistered) {
+    try { await remove(ref(db, 'active_users/' + sessionKey)); } catch (_) {}
+    sessionRegistered = false;
+  }
+  showLock(title, message);
+}
+window.verifyAdminAccess = async function(uid) {
+  await window.accessControlReady;
+  if (settingsCache && settingsCache.maintenance === true) return {ok:false, reason:'MAINTENANCE MODE IS ON'};
+  if (!isApproved(uid)) return {ok:false, reason:'UID NOT APPROVED BY ADMIN'};
+  loggedInUid = String(uid).trim();
+  window.isVerified = true;
+  return {ok:true};
+};
+
+onValue(settingsRef, snapshot => {
+  settingsCache = snapshot.exists() ? snapshot.val() : {};
+  settingsReadyResolve();
+  const version = settingsCache.authVersion ?? null;
+  if (previousAuthVersion !== undefined && version !== previousAuthVersion && loggedInUid) {
+    endSession('SECURITY UPDATED', 'Admin changed security settings. Please verify your UID again.');
+  }
+  previousAuthVersion = version;
+  if (settingsCache.maintenance === true) {
+    if (loggedInUid || window.isVerified) endSession('MAINTENANCE MODE', 'The administrator enabled maintenance. All sessions have been logged out.');
+    else {
+      document.getElementById('uidSubText').textContent = 'SYSTEM UNDER MAINTENANCE';
+      document.getElementById('uidSubText').style.color = 'var(--red)';
+    }
+  } else {
+    const msg = document.getElementById('uidSubText');
+    if (msg && msg.textContent === 'SYSTEM UNDER MAINTENANCE') msg.textContent = '';
+  }
+}, error => {
+  console.error('Firebase settings listener failed', error);
+  settingsReadyResolve();
+});
+onValue(approvedRef, snapshot => {
+  approvedCache = snapshot.exists() ? snapshot.val() : {};
+  approvedReadyResolve();
+  if (loggedInUid && !isApproved(loggedInUid)) endSession('UID ACCESS REVOKED', 'Your UID is no longer approved by the administrator.');
+}, error => { console.error('Approved UID listener failed', error); approvedReadyResolve(); });
+
+document.getElementById('accessLockOk').addEventListener('click', () => {
+  document.getElementById('accessLockOverlay').style.display = 'none';
+});
+// Register presence after a successful UID verification. Presence is informational; access checks are separate.
+const originalVerify = window.verifyAdminAccess;
+window.verifyAdminAccess = async function(uid) {
+  const result = await originalVerify(uid);
+  if (!result.ok) return result;
+  try {
+    const userRef = ref(db, 'active_users/' + sessionKey);
+    await set(userRef, { uid: String(uid).trim(), startedAt: Date.now(), page: 'Ace.html' });
+    sessionRegistered = true;
+    onDisconnect(userRef).remove().catch(() => {});
+  } catch (err) { console.warn('Could not register active session', err); }
+  return result;
+};
+</script>
+
+<script>
+/* ===== GLOBAL VERIFICATION FLAG ===== */
+window.isVerified = false; 
+let numInputVal='';
+let chartNum1=null;
+let akatsukiStrategy='DOJUTSU';
+
+/* ===== 1. GENZ LOADER LOGIC ===== */
+const loadFill = document.getElementById('loadFill');
+const loadPercent = document.getElementById('loadPercent');
+const loaderSubText = document.getElementById('loaderSubText');
+const genzLoader = document.getElementById('genzLoader');
+const mainContent = document.getElementById('mainContent');
+
+let progress = 0;
+const loadInterval = setInterval(() => {
+    progress += 2; 
+    if(progress > 100) progress = 100;
+    
+    loadFill.style.width = progress + '%';
+    loadPercent.textContent = progress + '%';
+
+    if (progress === 20) loaderSubText.textContent = "Fetching Live Data...";
+    if (progress === 45) loaderSubText.textContent = "Syncing AI Models...";
+    if (progress === 70) loaderSubText.textContent = "Connecting to Server...";
+    if (progress === 90) loaderSubText.textContent = "Almost Ready...";
+    
+    if (progress >= 100) {
+        clearInterval(loadInterval);
+        loaderSubText.textContent = "Initialization Complete.";
+        loaderSubText.style.color = "var(--gold)";
+        
+        setTimeout(() => {
+            genzLoader.style.opacity = '0';
+            setTimeout(() => {
+                genzLoader.style.display = 'none';
+                mainContent.style.display = 'flex'; 
+                document.getElementById('uidInput').focus();
+            }, 500);
+        }, 400);
+    }
+}, 100);
+
+
+/* ===== 2. UID VERIFICATION & 3 SEC ANIMATION ===== */
+const connectBtn = document.getElementById('connectBtn');
+const uidInput = document.getElementById('uidInput');
+const uidSubText = document.getElementById('uidSubText');
+const uidBox = document.getElementById('uidBox');
+const predBoxContainer = document.getElementById('predBoxContainer');
+
+const connectingState = document.getElementById('connectingState');
+const connectText = document.getElementById('connectText');
+const connSpinner = document.getElementById('connSpinner');
+const connCheck = document.getElementById('connCheck');
+
+// Access is controlled by the Admin Panel through Firebase; no hard-coded UID bypass.
+let currentVerifiedUid = '';
+let accessAttempt = 0;
+
+connectBtn.addEventListener('click', async () => {
+    const val = uidInput.value.trim();
+    if (!val) {
+        uidSubText.textContent = 'PLEASE ENTER YOUR UID';
+        uidSubText.style.color = 'var(--red)';
+        return;
+    }
+    const attempt = ++accessAttempt;
+    connectBtn.disabled = true;
+    connectBtn.classList.add('loading');
+    uidSubText.textContent = 'CHECKING ACCESS...';
+    uidSubText.style.color = 'var(--gold)';
+    try {
+        await window.accessControlReady;
+        const result = await window.verifyAdminAccess(val);
+        if (attempt !== accessAttempt) return;
+        if (!result.ok) {
+            connectBtn.classList.remove('loading');
+            connectBtn.disabled = false;
+            uidInput.classList.add('shake');
+            uidSubText.textContent = result.reason || 'UID NOT APPROVED';
+            uidSubText.style.color = 'var(--red)';
+            setTimeout(() => uidInput.classList.remove('shake'), 450);
+            return;
+        }
+        currentVerifiedUid = val;
+        connectBtn.classList.remove('loading');
+        uidBox.style.display = 'none';
+        connectingState.style.display = 'flex';
+        connSpinner.style.display = 'block';
+        connCheck.style.display = 'none';
+        connectText.style.color = 'var(--gold)';
+        connectText.textContent = 'VERIFYING UID...';
+        setTimeout(() => { if (attempt === accessAttempt) connectText.textContent = 'CONNECTING TO SERVER...'; }, 1200);
+        setTimeout(() => {
+            if (attempt !== accessAttempt || !isVerified) return;
+            connSpinner.style.display = 'none';
+            connCheck.style.display = 'block';
+            connectText.textContent = 'ACCESS GRANTED';
+            connectText.style.color = 'var(--green)';
+            connectText.style.textShadow = '0 0 10px rgba(25,229,164,0.5)';
+        }, 2500);
+        setTimeout(() => {
+            if (attempt !== accessAttempt || !isVerified) return;
+            connectingState.style.display = 'none';
+            predBoxContainer.style.display = 'flex';
+            connectBtn.disabled = false;
+            if (window10.every(x => x === null)) {
+                window10 = ['B','S','B','B','S','B','S','B','S','B'];
+                mode = 'rolling'; updatePrediction(); renderAll();
+            }
+        }, 3200);
+    } catch (err) {
+        connectBtn.classList.remove('loading');
+        connectBtn.disabled = false;
+        uidSubText.textContent = 'SERVER CHECK FAILED — TRY AGAIN';
+        uidSubText.style.color = 'var(--red)';
+        console.error('Access check failed', err);
+    }
+});
+
+uidInput.addEventListener('keypress', function (e) {
+    if (e.key === 'Enter') connectBtn.click();
+});
+
+
+/* ===== 3. ORIGINAL REAL AI LOGIC ===== */
+const KEY_MAP={'0000':'B','0101':'S','0202':'S','0303':'B','0404':'S','0505':'S','0606':'B','0707':'B','0808':'S','0909':'S','1010':'S','1111':'S','1212':'B','1313':'S','1414':'B','1515':'S','1616':'B','1717':'S','1818':'S','1919':'S','2020':'B','2121':'S','2222':'S','2323':'S','2424':'B','2525':'S','2626':'S','2727':'S','2828':'S','2929':'S','3030':'S','3131':'S','3232':'S','3333':'S','3434':'S','3535':'B','3636':'B','3737':'B','3838':'S','3939':'S','4040':'S','4141':'S','4242':'B','4343':'B','4444':'S','4545':'B','4646':'S','4747':'S','4848':'S','4949':'B','5050':'S','5151':'S','5252':'S','5353':'S','5454':'B','5555':'S','5656':'S','5757':'S','5858':'S','5959':'B','6060':'S','6161':'S','6262':'S','6363':'S','6464':'S','6565':'B','6666':'S','6767':'S','6868':'B','6969':'S','7070':'B','7171':'S','7272':'S','7373':'B','7474':'S','7575':'B','7676':'S','7777':'S','7878':'S','7979':'S','8080':'B','8181':'B','8282':'S','8383':'S','8484':'B','8585':'S','8686':'B','8787':'B','8888':'S','8989':'B','9090':'S','9191':'S','9292':'S','9393':'B','9494':'S','9595':'S','9696':'B','9797':'B','9898':'B','9999':'S'};
+const NUMBER_CHART=['B','B','S','S','B','B','S','S','B','B','S','B','S','B','S','S','S','B','S','B','S','S','S','B','B','B','S','S','S','B','S','S','B','S','B','S','B','S','B','S','S','S','S','B','B','S','S','S','B','B','S','S','S','S','S','S','S','S','B','B','S','B','B','B','S','B','B','B','B','B','S','B','S','B','B','B','B','S','B','S','S','B','B','S','S','S','B','S','S','B','B','B','S','B','S','B','B','S','S','B'];
+
+function getVipCoreVote(seqChrono){
+  if(!Array.isArray(seqChrono)||seqChrono.length<5)return null;
+  const bits=seqChrono.map(x=>x==='B'?1:0);
+  const n=bits.length;
+  const vWin=bits.slice(-Math.min(5,n));
+  const vSum=vWin.reduce((a,b)=>a+b,0);
+  const vVote=vSum%2===0?'B':'S';
+  const last2=bits.slice(-2);
+  const iVal=last2[0]*2+last2[1];
+  const iVote=iVal>=2?'B':'S';
+  const last3=bits.slice(-3).join('');
+  const colorMap={'000':'S','001':'S','010':'B','011':'B','100':'B','101':'S','110':'B','111':'S'};
+  const pVote=colorMap[last3]||'S';
+  let bV=0,sV=0;
+  if(vVote==='B')bV++;else sV++;
+  if(iVote==='B')bV++;else sV++;
+  if(pVote==='B')bV++;else sV++;
+  let aiVal,tieBreak='consensus';
+  if(bV>sV)aiVal='B';
+  else if(sV>bV)aiVal='S';
+  else{const avg=bits.reduce((a,b)=>a+b,0)/n;aiVal=avg>=0.5?'S':'B';tieBreak='mean-reversion'}
+  const consensus=Math.max(bV,sV)/3;
+  const confidence=0.60+consensus*0.30;
+  return{value:aiVal,source:'VIP Core',weight:3.2,reason:'V:'+vVote+' • I:'+iVote+' • P:'+pVote+' → '+aiVal,confidence:confidence};
+}
+
+function getKeyMapVote(periodId){
+  if(!periodId||periodId.length<2)return null;
+  const last2=periodId.slice(-2),key=last2+last2;
+  const result=KEY_MAP[key];
+  if(!result)return null;
+  return{value:result,source:'keyMap',weight:1,key:key,reason:'Key '+key+' → '+result,keyDisplay:key};
+}
+
+function getNumberChartVote(){
+  if(chartNum1===null||chartNum1===undefined)return null;
+  const res=NUMBER_CHART[chartNum1];
+  if(res!=='B'&&res!=='S')return null;
+  return{value:res,source:'Number',weight:1,reason:pad2(chartNum1)+' → '+(res==='B'?'BIG':'SMALL')};
+}
+
+function getComebackVote(seqChrono,periodId){
+  const numVote=getNumberChartVote();
+  const keyMapVote=getKeyMapVote(periodId);
+  const comebackVotes=[];
+  if(numVote)comebackVotes.push(numVote);
+  if(keyMapVote)comebackVotes.push(keyMapVote);
+  if(comebackVotes.length===0)return null;
+  const bVotes=comebackVotes.filter(v=>v.value==='B');
+  const sVotes=comebackVotes.filter(v=>v.value==='S');
+  const bWeight=bVotes.reduce((sum,v)=>sum+v.weight,0);
+  const sWeight=sVotes.reduce((sum,v)=>sum+v.weight,0);
+  let value,confidence,patternName,reason;
+  if(bWeight===sWeight){
+    if(keyMapVote&&keyMapVote.value){value=keyMapVote.value;confidence=0.65;patternName='TIEBREAK-KEYMAP';reason='COMEBACK tie → KeyMap '+keyMapVote.keyDisplay+' = '+value}
+    else{return null}
+  }else{
+    const winner=bWeight>sWeight?'B':'S';
+    const winnerVotes=comebackVotes.filter(v=>v.value===winner);
+    const loserVotes=comebackVotes.filter(v=>v.value!==winner);
+    if(comebackVotes.length===3&&loserVotes.length===0){confidence=0.95;patternName='3-0 UNANIMOUS'}
+    else if(comebackVotes.length===3&&winnerVotes.length===2){confidence=0.80;patternName='2-1 MAJORITY'}
+    else if(comebackVotes.length===2&&loserVotes.length===0){confidence=0.90;patternName='2-0 AGREE'}
+    else if(comebackVotes.length===2){confidence=0.72;patternName='WEIGHTED'}
+    else{confidence=Math.min(1,(winnerVotes[0].weight||1)*0.85);patternName=(winnerVotes[0].source||'Single')+' Only'}
+    value=winner;
+    reason='COMEBACK '+patternName+' → '+value;
+  }
+  return{value:value,source:'COMEBACK',weight:3.5,confidence:confidence,reason:reason,detail:'COMEBACK',pattern:patternName,isConflict:false,isSkip:false,chartSource:!!numVote};
+}
+
+function akatsukiGetBSHistory(){
+  const fromWindow=window10.filter(x=>x==='B'||x==='S');
+  const fromHidden=hiddenHistory.filter(x=>x==='B'||x==='S');
+  const fullOldestFirst=fromHidden.concat(fromWindow.slice().reverse());
+  const limited=fullOldestFirst.slice(-100);
+  return limited.slice().reverse();
+}
+
+function akatsukiComputeBSWeights(bs){
+  if(!bs.length||bs.length<3){const r=Math.random();return {B:r,S:1-r}}
+  let streak=1;
+  for(let i=1;i<Math.min(bs.length,8);i++){if(bs[i]===bs[0])streak++;else break}
+  let wB=0.5,wS=0.5;
+  if(streak>=4){if(bs[0]==='B'){wS+=0.32;wB-=0.32}else{wB+=0.32;wS-=0.32}}
+  else if(streak>=3){if(bs[0]==='B'){wS+=0.22;wB-=0.22}else{wB+=0.22;wS-=0.22}}
+  else if(streak>=2){if(bs[0]==='B'){wS+=0.10;wB-=0.10}else{wB+=0.10;wS-=0.10}}
+  const last10=bs.slice(0,10);
+  const bCnt=last10.filter(x=>x==='B').length;
+  const sCnt=last10.length-bCnt;
+  if(bCnt>=8){wS+=0.26;wB-=0.26}else if(bCnt>=7){wS+=0.18;wB-=0.18}else if(bCnt>=6){wS+=0.08;wB-=0.08}
+  if(sCnt>=8){wB+=0.26;wS-=0.26}else if(sCnt>=7){wB+=0.18;wS-=0.18}else if(sCnt>=6){wB+=0.08;wS-=0.08}
+  let alt=0;
+  const altLen=Math.min(bs.length-1,12);
+  for(let i=0;i<altLen;i++){if(bs[i]!==bs[i+1])alt++}
+  const altRate=altLen>0?alt/altLen:0.5;
+  if(altRate>0.72){if(bs[0]==='B'){wS+=0.20;wB-=0.20}else{wB+=0.20;wS-=0.20}}
+  else if(altRate<0.28){if(bs[0]==='B'){wB+=0.12;wS-=0.12}else{wS+=0.12;wB-=0.12}}
+  let bAfter=0,sAfter=0;
+  for(let i=1;i<bs.length;i++){if(bs[i]===bs[0]){if(bs[i-1]==='B')bAfter++;else sAfter++}}
+  const trTot=bAfter+sAfter;
+  if(trTot>2){const frac=bAfter/trTot;wB+=(frac-0.5)*0.30;wS-=(frac-0.5)*0.30}
+  wB=Math.max(0.05,Math.min(0.95,wB));
+  wS=Math.max(0.05,Math.min(0.95,wS));
+  const tot=wB+wS;
+  return{B:wB/tot,S:wS/tot};
+}
+
+function akatsukiDojutsu(bs){const ws=akatsukiComputeBSWeights(bs);const value=ws.B>=ws.S?'B':'S';const signal=Math.abs(ws.B-ws.S);const confidence=Math.min(0.97,0.76+signal*0.50);return{value:value,confidence:confidence,detail:'B:'+ws.B.toFixed(2)+' S:'+ws.S.toFixed(2)}}
+function akatsukiGenjutsu(bs){const base=akatsukiDojutsu(bs);let streak=1;for(let i=1;i<Math.min(bs.length,5);i++){if(bs[i]===bs[0])streak++;else break}if(streak<=1){const flipped=base.value==='B'?'S':'B';return{value:flipped,confidence:Math.max(0.75,base.confidence-0.02),detail:'Inversion'}}return base}
+function akatsukiClan(bs){if(bs.length<6)return akatsukiDojutsu(bs);const key=bs.slice(0,3).join('');for(let i=3;i<bs.length-3;i++){if(bs.slice(i,i+3).join('')===key){const next=bs[i-1];return{value:next,confidence:0.93,detail:'Pattern @'+i+'→'+next}}}return akatsukiDojutsu(bs)}
+function akatsukiVoid(bs){if(bs.length<4)return akatsukiDojutsu(bs);const lastB=bs.indexOf('B'),lastS=bs.indexOf('S');const gapB=lastB===-1?bs.length:lastB;const gapS=lastS===-1?bs.length:lastS;const value=gapB>gapS?'B':(gapS>gapB?'S':'B');return{value:value,confidence:0.89,detail:'Gap B:'+gapB+' S:'+gapS}}
+
+function getAkatsukiVote(){
+  const bs=akatsukiGetBSHistory();
+  if(bs.length<3)return null;
+  let r;
+  switch(akatsukiStrategy){
+    case 'GENJUTSU':r=akatsukiGenjutsu(bs);break;
+    case 'CLAN':r=akatsukiClan(bs);break;
+    case 'VOID':r=akatsukiVoid(bs);break;
+    default:r=akatsukiDojutsu(bs);
+  }
+  if(!r)return null;
+  return{value:r.value,source:'AKATSUKI',weight:3.0,reason:akatsukiStrategy+' → '+r.value,confidence:r.confidence};
+}
+
+function combinedAnalysis(seqChrono,periodId){
+  const vipVote=getVipCoreVote(seqChrono);
+  const omniVote=getComebackVote(seqChrono,periodId);
+  const akatsukiVote=getAkatsukiVote();
+  
+  const votes=[];
+  if(vipVote)votes.push(vipVote);
+  if(omniVote)votes.push(omniVote);
+  if(akatsukiVote)votes.push(akatsukiVote);
+  
+  if(votes.length===0){
+    let forced='B';
+    if(seqChrono.length>=1){const last=seqChrono[seqChrono.length-1];forced=last==='B'?'S':'B'}
+    return{value:forced,confidence:0.55,pattern:'EARLY',reason:'Early → '+forced,isConflict:false,isSkip:false};
+  }
+  
+  const bVotes=votes.filter(v=>v.value==='B'),sVotes=votes.filter(v=>v.value==='S');
+  const bWeight=bVotes.reduce((sum,v)=>sum+v.weight,0);
+  const sWeight=sVotes.reduce((sum,v)=>sum+v.weight,0);
+  
+  let winner;
+  if(bWeight>sWeight)winner='B';
+  else if(sWeight>bWeight)winner='S';
+  else{const heaviest=votes.slice().sort((a,b)=>b.weight-a.weight)[0];winner=heaviest?heaviest.value:'B'}
+  
+  const winnerVotes=votes.filter(v=>v.value===winner);
+  const totalVotes=votes.length;
+  let confidence,patternName;
+  
+  if(totalVotes===2&&winnerVotes.length===2){confidence=.90;patternName='2-0 AGREE'}
+  else if(totalVotes===2){confidence=.72;patternName='WEIGHTED VOTE'}
+  else{confidence=Math.max.apply(null,winnerVotes.map(v=>v.confidence||0.68));patternName=winnerVotes[0].source+' Only'}
+  
+  return{value:winner,confidence:confidence,pattern:patternName,reason:patternName+' → '+winner,isConflict:false,isSkip:false};
+}
+
+/* ===== STATE & API LOGIC ===== */
+const TOTAL=10,STORAGE_KEY='bs_state_win_final_v6';
+let window10=new Array(TOTAL).fill(null),hiddenHistory=[],mode='setup',history=[],lockedPred=null;
+let snapshots=[],lastAddedIndex=-1,gameMode='1min',winFlashTimer=null;
+let currentLevel=1, highestLevel=1;
+let apiPollTimer=null,apiBusy=false;
+let apiLastIssue={'1min':null,'30sec':null},apiSeeded={'1min':false,'30sec':false};
+let latestApiResults=[];
+
+const $=id=>document.getElementById(id);
+function pad2(n){return String(n).padStart(2,'0')}
+
+function getUTCPeriod(){
+  const now=new Date(),y=now.getUTCFullYear(),mo=pad2(now.getUTCMonth()+1),d=pad2(now.getUTCDate()),h=now.getUTCHours(),mi=now.getUTCMinutes();
+  if(gameMode==='1min'){const seq=String(10001+h*60+mi).padStart(5,'0');return ''+y+mo+d+'1000'+seq}
+  const tot=h*3600+mi*60+now.getUTCSeconds();
+  const seq=String(50001+Math.floor(tot/30)).padStart(5,'0');
+  return ''+y+mo+d+'1000'+seq;
+}
+
+function getRemainingSeconds(){const s=new Date().getUTCSeconds();return gameMode==='30sec'?30-(s%30):60-s}
+function updateTimerAndPeriod(){const rem=getRemainingSeconds();$('timer').textContent=`⏱ ${pad2(rem)}s`;$('periodId').textContent=getUTCPeriod()}
+
+function updatePrediction(){
+  const valid=window10.filter(x=>x==='B'||x==='S');
+  const chrono=valid.slice(0,10).reverse();
+  const current=getUTCPeriod();
+  const analysis=combinedAnalysis(chrono,current);
+  const finalValue=analysis.value;
+  lockedPred={value:finalValue,rawValue:finalValue,periodId:current,confidence:analysis.confidence||0,pattern:analysis.pattern||'None',reason:analysis.reason||'',isConflict:false,isSkip:false};
+}
+
+function renderBoxes(){
+  const el=$('boxes');if(!el)return;
+  el.innerHTML='';
+  for(let i=0;i<TOTAL;i++){
+    const box=document.createElement('div'),anim=i===lastAddedIndex&&lastAddedIndex>=0?' new-anim':'';
+    box.className='box'+(window10[i]?' '+window10[i]:'')+anim;
+    box.textContent=window10[i]||'';
+    el.appendChild(box);
+  }
+  lastAddedIndex=-1;
+}
+
+function renderPrediction(){
+  const v=$('predValue'),c=$('predConf');
+  $('highestLevelDisplay').textContent=`L${highestLevel}`;
+  $('currentLevelDisplay').textContent=`L${currentLevel}`;
+  
+  if(!lockedPred){
+    v.className='pred-value WAIT';v.textContent='WAIT';c.textContent='—';return;
+  }
+  v.className='pred-value '+lockedPred.value;
+  v.textContent=lockedPred.value==='B'?'BIG':'SMALL';
+  c.textContent=(lockedPred.confidence*100).toFixed(0)+'%';
+}
+
+function triggerWinAnimation() {
+    if (!isVerified) return; 
+    const overlay = $('winOverlay');
+    overlay.classList.add('show');
+    setTimeout(() => { overlay.classList.remove('show'); }, 2500);
+}
+
+function renderAll(){renderBoxes();renderPrediction();}
+
+/* ===== REAL API FETCHING ===== */
+function extractApiRows(payload){
+  const found=[],seen=new Set();
+  function walk(node,depth){
+    if(!node||typeof node!=='object'||depth>8||seen.has(node))return;
+    seen.add(node);
+    if(Array.isArray(node)){for(const item of node)walk(item,depth+1);return}
+    const issueRaw=node.issueNumber!=null?node.issueNumber:(node.issue_number!=null?node.issue_number:(node.issue!=null?node.issue:(node.period!=null?node.period:(node.periodNumber!=null?node.periodNumber:node.issue_no))));
+    const raw=node.number!=null?node.number:(node.resultNumber!=null?node.resultNumber:(node.result_number!=null?node.result_number:(node.result!=null?node.result:(node.openNumber!=null?node.openNumber:node.winNumber))));
+    if(issueRaw!==undefined&&raw!==undefined){
+      const issue=String(issueRaw).trim();
+      const match=String(raw).match(/(?:^|\D)([0-9])(?:\D|$)/);
+      const number=match?Number(match[1]):NaN;
+      if(issue&&Number.isFinite(number)&&number>=0&&number<=9)found.push({issue:issue,number:number,value:number>=5?'B':'S'});
+    }
+    Object.values(node).forEach(function(v){walk(v,depth+1)});
+  }
+  walk(payload,0);
+  const unique=Array.from(new Map(found.map(function(r){return [r.issue,r]})).values());
+  unique.sort(function(a,b){
+    if(/^\d+$/.test(a.issue)&&/^\d+$/.test(b.issue)){const aa=BigInt(a.issue),bb=BigInt(b.issue);return aa<bb?-1:aa>bb?1:0}
+    return a.issue.localeCompare(b.issue,undefined,{numeric:true});
+  });
+  return unique;
+}
+
+function setApiNumberChart(){
+  const nums=latestApiResults.map(function(r){return String(r.number)});
+  numInputVal=nums.join('').slice(0,2);
+  chartNum1=numInputVal===''?null:Number(numInputVal);
+}
+
+function applyApiResult(r){
+  if(lockedPred){
+    const skip=lockedPred.isSkip||lockedPred.value==='-';
+    if(skip)history.push({periodId:lockedPred.periodId||r.issue,predicted:'-',actual:r.value,correct:null,wasSkip:true,level:currentLevel});
+    else{
+      const wasCorrect=lockedPred.value===r.value;
+      history.push({periodId:lockedPred.periodId||r.issue,predicted:lockedPred.value,actual:r.value,correct:wasCorrect,level:currentLevel});
+      if(wasCorrect){currentLevel=1; triggerWinAnimation();}
+      else{currentLevel++; if(currentLevel>highestLevel) highestLevel=currentLevel;}
+    }
+    lockedPred=null;
+  }
+  if(mode==='setup'){
+    const idx=window10.findIndex(function(x){return x===null});
+    if(idx!==-1){window10[idx]=r.value;hiddenHistory.push(r.value);lastAddedIndex=idx}
+    if(window10.every(function(x){return x!==null}))mode='rolling';
+  }else{
+    const dropped=window10[TOTAL-1];
+    if(dropped==='B'||dropped==='S')hiddenHistory.push(dropped);
+    window10.pop();window10.unshift(r.value);lastAddedIndex=0;
+  }
+  updatePrediction();renderAll();
+}
+
+async function pollGameAPI(){
+  if(apiBusy)return;
+  apiBusy=true;
+  const url = gameMode==='1min'?'https://draw.ar-lottery01.com/WinGo/WinGo_1M/GetHistoryIssuePage.json':'https://draw.ar-lottery01.com/WinGo/WinGo_30S/GetHistoryIssuePage.json';
+  try{
+    const response=await fetch(url,{method:'GET',cache:'no-store'});
+    if(!response.ok)throw new Error('HTTP');
+    const payload=await response.json();
+    const rows=extractApiRows(payload);
+    if(!rows.length)throw new Error('No rows');
+    const last=rows[rows.length-1];
+    latestApiResults=rows.slice(-2).reverse();
+    
+    if(!apiSeeded[gameMode]){
+      const recent=rows.slice(-TOTAL).reverse();
+      window10=new Array(TOTAL).fill(null);
+      recent.forEach(function(r,i){window10[i]=r.value});
+      hiddenHistory=rows.slice(0,-TOTAL).reverse().map(function(r){return r.value});
+      mode=recent.length===TOTAL?'rolling':'setup';
+      apiLastIssue[gameMode]=last.issue;
+      apiSeeded[gameMode]=true;
+      setApiNumberChart();
+      updatePrediction();renderAll();
+    }else if(apiLastIssue[gameMode]!==last.issue){
+      let fresh=rows.filter(function(r){
+        if(/^\d+$/.test(r.issue)&&/^\d+$/.test(String(apiLastIssue[gameMode]||'')))return BigInt(r.issue)>BigInt(apiLastIssue[gameMode]);
+        return String(r.issue).localeCompare(String(apiLastIssue[gameMode]||''),undefined,{numeric:true})>0;
+      });
+      if(!fresh.length)fresh=[last];
+      fresh.forEach(function(r){applyApiResult(r)});
+      apiLastIssue[gameMode]=last.issue;
+      setApiNumberChart();updatePrediction();renderAll();
+    }else{
+      setApiNumberChart();updatePrediction();renderAll();
+    }
+  }catch(err){
+    console.warn('API failed, but UI is alive via seeded data.');
+  }finally{apiBusy=false}
+}
+
+function startApiPolling(){
+  if(apiPollTimer)clearInterval(apiPollTimer);
+  pollGameAPI();
+  apiPollTimer=setInterval(pollGameAPI,3000);
+}
+
+function switchMode(m){
+  if(m===gameMode)return;
+  gameMode=m;
+  apiSeeded[m]=false;apiLastIssue[m]=null;
+  window10=new Array(TOTAL).fill(null);hiddenHistory=[];mode='setup';lockedPred=null;lastAddedIndex=-1;
+  history=[];snapshots=[];
+  currentLevel=1; highestLevel=1;
+  
+  $('oneMinBtn').classList.toggle('active',gameMode==='1min');
+  $('thirtySecBtn').classList.toggle('active',gameMode==='30sec');
+  renderAll();updateTimerAndPeriod();
+  pollGameAPI();
+}
+
+// INIT
+setInterval(updateTimerAndPeriod, 1000);
+updateTimerAndPeriod();
+renderBoxes();
+startApiPolling(); 
+</script>
+</body>
+</html>
